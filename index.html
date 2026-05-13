@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mixtape Grandparent — Not Your Granny's Legacy</title>
+<meta name="description" content="A guided legacy system for the grandparent who grew up making mixtapes. Journals, video prompts, and the stories worth keeping. Not your granny's legacy.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Bungee&family=Special+Elite&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0c1416;
+    --bg-elevated: #131e21;
+    --ink: #f4ead7;
+    --ink-dim: #c9bda4;
+    --ink-faint: #7a715f;
+    --coral: #e85a4a;
+    --amber: #e8a13a;
+    --teal: #1f4d52;
+    --teal-bright: #2d6f76;
+    --rule: #2a3a3d;
+    --serif: 'EB Garamond', Georgia, serif;
+    --display: 'Bungee', 'Impact', sans-serif;
+    --mono: 'Special Elite', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* Subtle film-grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.92 0 0 0 0 0.84 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.55;
+    mix-blend-mode: overlay;
+  }
+
+  a { color: var(--amber); text-decoration: none; transition: color 0.2s ease; }
+  a:hover { color: var(--coral); }
+
+  /* ============================================
+     NAVIGATION
+     ============================================ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(12, 20, 22, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .brand {
+    font-family: var(--display);
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-mark {
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral) 40%, var(--amber) 40%, var(--amber) 70%, var(--teal-bright) 70%);
+    flex-shrink: 0;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--ink-dim);
+    font-family: var(--mono);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .nav-links a:hover { color: var(--coral); }
+
+  @media (max-width: 720px) {
+    .nav-inner { padding: 14px 20px; gap: 16px; }
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 12px; letter-spacing: 0.1em; }
+    .brand { font-size: 14px; }
+  }
+
+  /* ============================================
+     LAYOUT WRAPPERS
+     ============================================ */
+  section { position: relative; z-index: 2; }
+  .wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .wrap-narrow {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  @media (max-width: 720px) {
+    .wrap, .wrap-narrow { padding: 0 20px; }
+  }
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .hero {
+    padding: 80px 0 100px;
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .hero { padding: 50px 0 70px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--amber);
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(44px, 6.5vw, 84px);
+    line-height: 0.95;
+    color: var(--ink);
+    margin-bottom: 32px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 .accent { color: var(--coral); display: block; }
+  .hero-lede {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    margin-bottom: 40px;
+    max-width: 520px;
+  }
+  .hero-lede .tagline {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: var(--serif);
+    font-style: normal;
+    font-weight: 600;
+    color: var(--amber);
+    white-space: nowrap;
+  }
+  @media (max-width: 540px) {
+    .hero-lede .tagline { white-space: normal; }
+  }
+
+  /* Cassette illustration */
+  .cassette-stage {
+    position: relative;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cassette {
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));
+    animation: cassetteFloat 6s ease-in-out infinite;
+  }
+  @keyframes cassetteFloat {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%      { transform: translateY(-8px) rotate(-1deg); }
+  }
+
+  /* ============================================
+     CTA BUTTON
+     ============================================ */
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    font-family: var(--display);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+    border: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+  }
+  .btn-primary {
+    background: var(--coral);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: var(--amber);
+    color: var(--bg);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink-faint);
+  }
+  .btn-secondary:hover {
+    color: var(--amber);
+    border-color: var(--amber);
+  }
+
+  /* ============================================
+     SIGNUP STRIP — the primary CTA
+     ============================================ */
+  .signup {
+    padding: 90px 0;
+    border-bottom: 1px solid var(--rule);
+    background:
+      radial-gradient(circle at 20% 50%, rgba(232, 90, 74, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 50%, rgba(232, 161, 58, 0.06) 0%, transparent 50%);
+  }
+  .signup-card {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .signup-kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 18px;
+  }
+  .signup h2 {
+    font-family: var(--display);
+    font-size: clamp(32px, 4.5vw, 48px);
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+  .signup p {
+    color: var(--ink-dim);
+    font-size: 19px;
+    margin-bottom: 36px;
+    line-height: 1.55;
+  }
+  .signup-form {
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .signup-form input {
+    flex: 1;
+    padding: 16px 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    border-radius: 2px;
+    transition: border-color 0.2s ease;
+  }
+  .signup-form input:focus {
+    outline: none;
+    border-color: var(--amber);
+  }
+  .signup-form input::placeholder { color: var(--ink-faint); font-style: italic; }
+  .signup-form button {
+    padding: 16px 24px;
+    background: var(--coral);
+    color: var(--bg);
+    font-family: var(--display);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    border: 0;
+    border-radius: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s ease;
+  }
+  .signup-form button:hover { background: var(--amber); }
+  .signup-fineprint {
+    margin-top: 18px;
+    font-size: 14px;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+  @media (max-width: 560px) {
+    .signup { padding: 60px 0; }
+    .signup-form { flex-direction: column; }
+  }
+
+  /* ============================================
+     SECTION HEADERS
+     ============================================ */
+  .section-pad { padding: 100px 0; border-bottom: 1px solid var(--rule); }
+  @media (max-width: 720px) { .section-pad { padding: 70px 0; } }
+
+  .section-kicker {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-kicker::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--amber);
+  }
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 1.02;
+    color: var(--ink);
+    margin-bottom: 28px;
+    max-width: 720px;
+  }
+  .section-title .accent { color: var(--coral); }
+
+  /* About headline: two-line setup + payoff */
+  .about-title { display: block; }
+  .about-title .about-line-1 {
+    display: block;
+    font-size: 0.62em;
+    color: var(--ink-dim);
+    margin-bottom: 10px;
+    letter-spacing: 0;
+  }
+  .about-title .about-line-2 {
+    display: block;
+  }
+
+  /* ============================================
+     ABOUT
+     ============================================ */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 36px; }
+  }
+  .about-prose p {
+    margin-bottom: 22px;
+    color: var(--ink-dim);
+    font-size: 20px;
+    line-height: 1.65;
+  }
+  .about-prose p:first-of-type::first-letter {
+    font-family: var(--display);
+    font-size: 64px;
+    float: left;
+    line-height: 0.85;
+    padding: 6px 12px 0 0;
+    color: var(--coral);
+  }
+  .about-prose strong {
+    color: var(--ink);
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  /* Sidebar fact-list */
+  .factlist {
+    border-left: 1px solid var(--rule);
+    padding-left: 32px;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+  }
+  .factlist .label {
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 11px;
+    display: block;
+    margin-top: 18px;
+  }
+  .factlist .label:first-child { margin-top: 0; }
+  .factlist .value { color: var(--ink); display: block; }
+
+  /* ============================================
+     READ (Substack doorway)
+     ============================================ */
+  .read-intro {
+    max-width: 640px;
+    margin-bottom: 60px;
+  }
+  .read-intro p {
+    color: var(--ink-dim);
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  .post-list {
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .post-list li {
+    border-bottom: 1px solid var(--rule);
+    padding: 28px 0;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    transition: padding 0.25s ease;
+  }
+  .post-list li:hover { padding-left: 12px; }
+  .post-track {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    min-width: 80px;
+  }
+  .post-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-style: italic;
+    color: var(--ink);
+  }
+  .post-date {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+  }
+  .read-cta { margin-top: 50px; text-align: center; }
+
+  @media (max-width: 720px) {
+    .post-list li { grid-template-columns: 1fr; gap: 6px; padding: 22px 0; }
+    .post-title { font-size: 19px; }
+  }
+
+  /* ============================================
+     CONTACT
+     ============================================ */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+  }
+  @media (max-width: 720px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+  }
+  .contact-block h3 {
+    font-family: var(--display);
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .contact-block p {
+    color: var(--ink-dim);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .contact-email {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--amber);
+    display: inline-block;
+    border-bottom: 1px dashed var(--amber);
+    padding-bottom: 2px;
+  }
+  .contact-email:hover { color: var(--coral); border-color: var(--coral); }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  footer {
+    padding: 50px 0 60px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .footer-tag {
+    font-family: var(--display);
+    font-size: 14px;
+    color: var(--coral);
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .footer-meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ============================================
+     ANIMATIONS
+     ============================================ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: reveal 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .reveal-1 { animation-delay: 0.05s; }
+  .reveal-2 { animation-delay: 0.2s; }
+  .reveal-3 { animation-delay: 0.35s; }
+  .reveal-4 { animation-delay: 0.5s; }
+  @keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAV
+     ============================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      THE MIXTAPE GRANDPARENT
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#read">Read</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<section id="top" class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow reveal reveal-1">SIDE A // TRACK 01</div>
+        <h1 class="reveal reveal-2">
+          The stories worth keeping.
+          <span class="accent">Pick up the pen.</span>
+        </h1>
+        <p class="hero-lede reveal reveal-3">
+          A legacy system for the grandparent who grew up making mixtapes — the ones with handwritten labels and one specific song that ruined them in the best way. <span class="tagline">Not your granny&rsquo;s legacy.</span>
+        </p>
+        <div class="cta-row reveal reveal-4">
+          <a href="#signup" class="btn btn-primary">Get the launch list</a>
+          <a href="#read" class="btn btn-secondary">Read the publication →</a>
+        </div>
+      </div>
+
+      <div class="cassette-stage reveal reveal-4">
+        <!-- Inline SVG cassette: matches journal cover aesthetic -->
+        <svg class="cassette" viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" aria-label="Vintage cassette tape illustration">
+          <defs>
+            <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#1f4d52"/>
+              <stop offset="1" stop-color="#163a3e"/>
+            </linearGradient>
+            <linearGradient id="labelG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f4ead7"/>
+              <stop offset="1" stop-color="#d9c9a4"/>
+            </linearGradient>
+            <pattern id="grain" patternUnits="userSpaceOnUse" width="100" height="100">
+              <rect width="100" height="100" fill="none"/>
+              <circle cx="20" cy="30" r="0.5" fill="rgba(0,0,0,0.15)"/>
+              <circle cx="60" cy="50" r="0.5" fill="rgba(0,0,0,0.1)"/>
+              <circle cx="40" cy="80" r="0.5" fill="rgba(0,0,0,0.12)"/>
+              <circle cx="80" cy="20" r="0.5" fill="rgba(0,0,0,0.1)"/>
+            </pattern>
+          </defs>
+
+          <!-- Body -->
+          <rect x="40" y="60" width="400" height="240" rx="14" fill="url(#bodyG)"/>
+          <rect x="40" y="60" width="400" height="240" rx="14" fill="url(#grain)"/>
+
+          <!-- Top buttons -->
+          <rect x="100" y="50" width="240" height="32" rx="4" fill="#e85a4a"/>
+          <rect x="130" y="58" width="32" height="14" rx="2" fill="#1f4d52" opacity="0.55"/>
+          <rect x="180" y="58" width="32" height="14" rx="2" fill="#1f4d52" opacity="0.55"/>
+          <rect x="230" y="58" width="32" height="14" rx="2" fill="#1f4d52" opacity="0.55"/>
+          <rect x="280" y="58" width="32" height="14" rx="2" fill="#1f4d52" opacity="0.55"/>
+
+          <!-- Label area -->
+          <rect x="70" y="90" width="340" height="80" rx="3" fill="url(#labelG)"/>
+          <line x1="86" y1="112" x2="394" y2="112" stroke="#7a715f" stroke-width="0.6" opacity="0.4"/>
+          <line x1="86" y1="132" x2="394" y2="132" stroke="#7a715f" stroke-width="0.6" opacity="0.4"/>
+          <line x1="86" y1="152" x2="394" y2="152" stroke="#7a715f" stroke-width="0.6" opacity="0.4"/>
+          <text x="240" y="142" text-anchor="middle" font-family="Permanent Marker, cursive" font-size="22" fill="#0c0c0c" transform="rotate(-2 240 142)">The Stories Worth Keeping</text>
+
+          <!-- Coral stripe -->
+          <rect x="40" y="180" width="400" height="34" fill="#e85a4a"/>
+          <!-- Amber stripe -->
+          <rect x="40" y="218" width="400" height="20" fill="#e8a13a"/>
+
+          <!-- Reel window -->
+          <rect x="170" y="190" width="140" height="44" rx="3" fill="#0c1416"/>
+          <!-- Reels -->
+          <circle cx="190" cy="212" r="14" fill="#d9c9a4"/>
+          <circle cx="190" cy="212" r="5" fill="#0c1416"/>
+          <circle cx="290" cy="212" r="14" fill="#d9c9a4"/>
+          <circle cx="290" cy="212" r="5" fill="#0c1416"/>
+          <!-- Tape strand between -->
+          <path d="M204 212 Q240 200 276 212" stroke="#e8a13a" stroke-width="1.5" fill="none" opacity="0.85"/>
+
+          <!-- Bottom shelf -->
+          <rect x="180" y="252" width="120" height="36" rx="3" fill="#163a3e"/>
+          <!-- Loose tape spilling out -->
+          <path d="M200 290 Q220 308 250 296 T310 304" stroke="#e8a13a" stroke-width="2" fill="none" opacity="0.7"/>
+          <path d="M205 295 Q225 312 255 300 T312 308" stroke="#e85a4a" stroke-width="1.5" fill="none" opacity="0.6"/>
+
+          <!-- Screw details -->
+          <circle cx="58" cy="78" r="2" fill="#0c1416" opacity="0.6"/>
+          <circle cx="422" cy="78" r="2" fill="#0c1416" opacity="0.6"/>
+          <circle cx="58" cy="282" r="2" fill="#0c1416" opacity="0.6"/>
+          <circle cx="422" cy="282" r="2" fill="#0c1416" opacity="0.6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SIGNUP
+     ============================================ -->
+<section id="signup" class="signup">
+  <div class="wrap-narrow">
+    <div class="signup-card">
+      <div class="signup-kicker">SIDE A // GET ON THE LIST</div>
+      <h2>Be the first to know when the journal lands.</h2>
+      <p>
+        The Mixtape Grandparent Journal is in production. Get the launch list and you'll know the day it goes live — plus the weekly Substack posts on the way there. No spam, no Pinterest-perfect grandparenting tips. Just the good stuff.
+      </p>
+      <form class="signup-form" id="signup-form" action="https://themixtapegrandparent.substack.com/" method="get" target="_blank">
+        <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address">
+        <button type="submit">Sign me up</button>
+      </form>
+      <div class="signup-fineprint">Subscribes via Substack. Unsubscribe anytime. 🎵</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     ABOUT
+     ============================================ -->
+<section id="about" class="section-pad">
+  <div class="wrap">
+    <div class="section-kicker">SIDE B // ABOUT</div>
+    <h2 class="section-title about-title">
+      <span class="about-line-1">Not the Hallmark version.</span>
+      <span class="about-line-2">The version <span class="accent">your grandkids actually need.</span></span>
+    </h2>
+
+    <div class="about-grid">
+      <div class="about-prose">
+        <p>
+          This isn't a memory book. It isn't a scrapbook with cartoon hearts in the margins. It isn't somewhere to write down recipes and bless your grandkids with "Grandma's wisdom."
+        </p>
+        <p>
+          The Mixtape Grandparent is a <strong>legacy system</strong> for the grandparent who grew up making mixtapes — the ones with handwritten labels and one specific song that ruined them in the best way — and is now becoming the kind of grandparent nobody saw coming.
+        </p>
+        <p>
+          A guided journal you can hold. A digital version you can fill from anywhere. Thirty video prompts for the ones who'd rather talk than write. Same job, three formats — because the work of leaving your real story behind shouldn't depend on whether you prefer pen, keyboard, or camera.
+        </p>
+        <p>
+          Your grandkids are going to inherit your stuff. Give them <strong>your story first</strong> — the version that was walking around at seventeen, in love with a song nobody else understood. That version. The one money can't pass down.
+        </p>
+      </div>
+
+      <aside class="factlist">
+        <span class="label">Tagline</span>
+        <span class="value">Not your granny's legacy.</span>
+
+        <span class="label">For</span>
+        <span class="value">Gen X grandparents. The ones who made mixtapes.</span>
+
+        <span class="label">Formats</span>
+        <span class="value">Physical journal. Digital journal. Video prompts.</span>
+
+        <span class="label">Where the writing lives</span>
+        <span class="value"><a href="#read">The Substack publication →</a></span>
+
+        <span class="label">Status</span>
+        <span class="value">Pre-launch. Journal in production.</span>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     READ
+     ============================================ -->
+<section id="read" class="section-pad">
+  <div class="wrap">
+    <div class="section-kicker">SIDE C // READ</div>
+    <h2 class="section-title">The writing lives <span class="accent">on Substack.</span></h2>
+
+    <div class="read-intro">
+      <p>
+        A weekly Substack on Gen X grandparenting, legacy, the songs that take you back, and the stories worth keeping. Free. Lands in your inbox. Ends with a 🎵.
+      </p>
+    </div>
+
+    <ul class="post-list">
+      <li>
+        <span class="post-track">Track 03</span>
+        <span class="post-title">The Song That Takes You Back to Being 17</span>
+        <span class="post-date">Most recent</span>
+      </li>
+      <li>
+        <span class="post-track">Track 02</span>
+        <span class="post-title">Nobody Remembers the Big Moments the Way You Think They Do</span>
+        <span class="post-date">Earlier</span>
+      </li>
+      <li>
+        <span class="post-track">Track 01</span>
+        <span class="post-title">Welcome to The Mixtape Grandparent — This One's For You</span>
+        <span class="post-date">From the top</span>
+      </li>
+    </ul>
+
+    <div class="read-cta">
+      <a href="https://themixtapegrandparent.substack.com" target="_blank" rel="noopener" class="btn btn-primary">Subscribe on Substack →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     CONTACT
+     ============================================ -->
+<section id="contact" class="section-pad">
+  <div class="wrap-narrow">
+    <div class="section-kicker">SIDE D // CONTACT</div>
+    <h2 class="section-title">Get in touch.</h2>
+
+    <div class="contact-grid">
+      <div class="contact-block">
+        <h3>For readers</h3>
+        <p>Questions, hellos, "this reminded me of my dad" — all welcome.</p>
+        <a href="mailto:hello@mixtapegrandparent.com" class="contact-email">hello@mixtapegrandparent.com</a>
+      </div>
+      <div class="contact-block">
+        <h3>For institutions</h3>
+        <p>Senior centers, libraries, hospices, memory care. Licensing inquiries are warmly received.</p>
+        <a href="mailto:institutions@mixtapegrandparent.com" class="contact-email">institutions@mixtapegrandparent.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-tag">Not your granny's legacy. 🎵</div>
+    <div class="footer-meta">© The Mixtape Grandparent™ · Oregon LLC</div>
+  </div>
+</footer>
+
+<script>
+  // Tiny enhancement: signup form passes the email to Substack's subscribe URL
+  document.getElementById('signup-form').addEventListener('submit', function(e) {
+    // Substack accepts ?email=... on its /subscribe endpoint
+    // The form's GET + target=_blank handles it natively
+  });
+</script>
+
+</body>
+</html>
